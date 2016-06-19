@@ -1,0 +1,28 @@
+#clean
+directory <custom=%uarg:boot%>;
+delete "/unpacked_boot";
+delete "/new_unpacked_boot.img";
+delete "/unpacked_boot.img";
+
+directory <custom=%uarg:rom%>;
+#copy boot.img
+copy "/boot.img" "/../../i1-tools/boot-tools/unpacked_boot.img";
+
+directory <custom=%uarg:boot%>;
+#unpack boot
+runscript "/unpack.bat" "unpacked_boot.img";
+#edit camera
+replacefromfile "/unpacked_boot/ramdisk/init.mt6582_common.rc" "	#Camera" "/../../repositories/patches/main/other/#Camera.rc";
+#copy kernel dir
+copy "/../../repositories/patches/main/boot/kernel" "/unpacked_boot/unpacked_boot.img-kernel";
+runscript "/repack.bat" "unpacked_boot";
+
+directory <custom=%uarg:rom%>;
+#copy boot.img
+copy "/../../i1-tools/boot-tools/new_unpacked_boot.img" "/boot.img";
+
+#clean
+directory <custom=%uarg:boot%>;
+delete "/unpacked_boot";
+delete "/new_unpacked_boot.img";
+delete "/unpacked_boot.img";
